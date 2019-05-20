@@ -8,11 +8,29 @@ using System.Threading.Tasks;
 using System.IO;
 using System.CodeDom.Compiler;
 
-namespace ChestCompiler
+namespace ChestTranspiler
 {
     public static class Build
     {
-        public static CompilerResults BuildTextBlock(string textBlock, string sourceName = null)
+        public static string Transpile(string textBlock, string language = "CSharp")
+        {
+            var targetUnit = BuildTextBlock(textBlock);
+
+            CodeDomProvider provider = CodeDomProvider.CreateProvider(language);
+            CodeGeneratorOptions options = new CodeGeneratorOptions();
+            options.BracingStyle = "C";
+
+            var memStream = new MemoryStream();
+
+            var streamWriter = new StreamWriter(memStream);
+
+            provider.GenerateCodeFromCompileUnit(targetUnit, streamWriter, options);
+
+            return System.Text.Encoding.UTF8.GetString(memStream.ToArray());
+
+        }
+
+        internal static CodeCompileUnit BuildTextBlock(string textBlock)
         {
             var codeLines = CodeBlock.Convert(textBlock);
 
@@ -53,21 +71,8 @@ namespace ChestCompiler
                 varNames.Pop();
 
 
-                CodeDomProvider provider = CodeDomProvider.CreateProvider("CSharp");
-                CodeGeneratorOptions options = new CodeGeneratorOptions();
-                options.BracingStyle = "C";
-                if (sourceName != null)
-                {
-                    using (StreamWriter sourceWriter = new StreamWriter(sourceName))
-                    {
-                        provider.GenerateCodeFromCompileUnit(
-                            targetUnit, sourceWriter, options);
-
-                        sourceWriter.Flush();
-                        sourceWriter.Close();
-                    }
-                }
-                return provider.CompileAssemblyFromDom(new CompilerParameters(), new CodeCompileUnit[] { targetUnit });
+                
+                return targetUnit;
 
             }
 

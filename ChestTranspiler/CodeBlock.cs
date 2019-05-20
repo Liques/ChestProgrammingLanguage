@@ -5,9 +5,9 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
-namespace ChestCompiler
+namespace ChestTranspiler
 {
-    internal class CodeBlock
+    public class CodeBlock
     {
         private const string tabDelimiter = "\\t";
         private const string tabSpaceSize = "    ";
