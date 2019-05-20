@@ -3,7 +3,6 @@ using ChestCompiler;
 using System;
 using System.Linq;
 using Xunit;
-using ChestTranspiler;
 
 namespace ChestCompilerTests
 {
@@ -49,7 +48,7 @@ building TrumpTower
 
 ";
 
-            var obj = Build.Transpile(codeBlock);
+            var obj = Build.BuildTextBlock(codeBlock,"test.cs");
 
             Assert.NotNull(obj);
 
@@ -88,10 +87,11 @@ building TrumpTower
 
 ";
             
-            var obj = Build.Transpile(codeBlock, "CSharp");
+            var obj = Build.BuildTextBlock(codeBlock, "test.cs");
 
             Assert.NotNull(obj);
-            Assert.True(obj.IndexOf("class Lobby") >= 0);
+            var name = obj.CompiledAssembly.GetTypes().First().Name;
+            Assert.Equal("Lobby", obj.CompiledAssembly.GetTypes().First().Name);
 
         }
 
@@ -135,10 +135,11 @@ building TrumpTower
 
 ";
            
-            var obj = Build.Transpile(codeBlock, "CSharp");
+            var obj = Build.BuildTextBlock(codeBlock, "test.cs");
 
             Assert.NotNull(obj);
-            Assert.True(obj.IndexOf("Robot") >= 0);
+            var name = obj.CompiledAssembly.GetTypes().First().Name;
+            Assert.Equal("Robot", obj.CompiledAssembly.GetTypes().First().Name);
 
         }
 

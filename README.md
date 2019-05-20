@@ -66,8 +66,7 @@ building MyBusinessBuilding
 I'm sorry... For a while, it's a concept yet, I'm still building it.
 
 ## Where can I run this language?
-We have a prototype compiler in this repository where is possible to compile the language, but it was built only to test the 
-language concept, a compiled version of this compiler is not available yet.
+We have a prototype "transpiler" in this repository where is possible to transform the Chest code to C#. There is no compiler yet.
 
 ## License
 
