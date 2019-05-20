@@ -68,16 +68,11 @@
   <ItemGroup>
     <Compile Include="PrincipleTests.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="TranspilerTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ChestCompiler\ChestCompiler.csproj">
-      <Project>{561dcca1-3c3c-46e3-a114-6eb65891954b}</Project>
-      <Name>ChestCompiler</Name>
-    </ProjectReference>
     <ProjectReference Include="..\ChestTranspiler\ChestTranspiler.csproj">
       <Project>{6b4cc5dc-8e6d-4efd-8489-adeaf3e6f53e}</Project>
       <Name>ChestTranspiler</Name>
