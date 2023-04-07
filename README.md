@@ -19,7 +19,14 @@ Done, you already know the basic concepts of Chest language!
 
 Looks now this concept as the code:
 
+``` Rust
+chest helloWorldChest
+  "Hello World"
+show helloWorldChest // output: "Hello World"
 ```
+
+The same example a little bit more complex, using a concept of OOO.
+``` Rust
 
 building MyBusinessBuilding
   office Reception
@@ -29,10 +36,9 @@ building MyBusinessBuilding
       show helloWorldChest
 ```
 
-Another example a little bit more complex using .NET libraries.
+Another example:
 
-```
-
+``` Rust
 building MyBusinessBuilding
   office Lobby
     employee NameChecker
@@ -40,15 +46,15 @@ building MyBusinessBuilding
         go Console
           poke ReadLine
       chest 
-        ""John""
+        "John"
       go Console
         poke WriteLine
-          ""The name is "" + rightName
+          "The name is " + rightName
       decide
         name == rightName
         go Console
           poke WriteLine
-            ""The name is John""
+            "The name is John"
 ```
 
 ## Is it complete?
@@ -66,7 +72,7 @@ The spacing standard is like in Python, it is tabular. This means that the code 
 #### building ####
 The base of the language, like a namespace or a package in other languages. All parts of the language must be inside a building.
 
-```
+``` Rust
 // Chest
 building MyBusinessBuilding
   ...
@@ -89,7 +95,7 @@ var MyBusinessBuilding = {
 ##### office ####
 An object type, like a class or an object in other languages. Instead of being an object, it is like a place inside the building.
 
-```
+```Rust
 // Chest
 office Reception
   ...
@@ -113,7 +119,7 @@ var Reception = {
 #### employee ####
 A method, like a void method or a function in other languages. It is supposed to do something in the office.
 
-```
+```Rust
 // Chest
 employee Reception
 
@@ -136,7 +142,7 @@ function Reception() {
 #### chest ####
 Chest is a variable (also this programming language name), like a string or a number in other languages. It can contain text or numbers, like a double.
 
-```
+```Rust
 // Chest
 chest helloWorldChest
   "Hello World"
@@ -163,8 +169,7 @@ var helloWorldChest = 1.0;
 #### go ####
 A command to go to like a physical place, like accessing an object or a property in other programming languages. It is used to go to an office or a chest.
 
-```
-
+```Rust
 // Chest
 go Console 
   poke WriteLine 
@@ -192,7 +197,7 @@ helloWorldChest.length;
 #### poke ####
 A command to poke something, like using a dot or calling a method in other languages. It is used to poke an employee or a chest inside an office.
 
-```
+```Rust
 // Chest
 go Console 
   poke ReadLine 
@@ -219,7 +224,7 @@ helloWorldChest.toUpperCase();
 #### show ####
 A command to show something, like printing to the console or alerting in other languages. It is used to show the content of a chest.
 
-```
+```Rust
 // Chest 
 show helloWorldChest 
 
@@ -238,7 +243,7 @@ alert(helloWorldChest);
 #### decide ####
 A command to decide something, like an if condition or a ternary operator in other languages. It is used to compare chests and execute different code blocks.
 
-```
+```Rust
 // Chest 
 decide 
   helloWorldChest == "1" 
@@ -274,7 +279,7 @@ or
 
 Below we have an example using C# as reference.
 
-```
+``` Rust
 // the building is like a base of the language, it is like the "namespace" of C#. All parts of the language must be inside a building.
 // the type is "building" and the building name is "MyBusinessBuilding"
 building MyBusinessBuilding
@@ -293,21 +298,21 @@ building MyBusinessBuilding
                     // The "poke" type works like a "." in C#. It is now giviving ".ReadLine()" to acess methods or properties insinde an object.
                     poke ReadLine
             chest rightName
-                ""John""
+                "John"
             go Console 
                 poke WriteLine
-                    ""The name is {0}""
+                    "The name is {0}"
                     name
             // A command to decide something, like an if condition or a ternary operator in other languages. It is used to compare chests and execute different code blocks.
-            // This block of code generating like in C#: "if(name == rightName) { Console.WriteLine("The name is John"") else if(name != rightName) { Console.WriteLine("The name is not John"")}"
+            // This block of code generating like in C#: "if(name == rightName) { Console.WriteLine("The name is John") else if(name != rightName) { Console.WriteLine("The name is not John")}"
             decide
                 name == rightName
                     go Console
                         poke WriteLine
-                            ""The name is John""
+                            "The name is John"
 
                 name != rightName
                     go Console
                         poke WriteLine
-                            ""The name is NOT John""
+                            "The name is NOT John"
 ```
