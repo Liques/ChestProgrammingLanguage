@@ -1,5 +1,7 @@
 
-# Chest
+# Chest Programming Language
+
+![](icon.png)
 
 Chest is a programming language designed to be easy and to be learned quickly. To become "easy", the Chest language try to have its syntax closer to our real world using familiar concepts.
 
