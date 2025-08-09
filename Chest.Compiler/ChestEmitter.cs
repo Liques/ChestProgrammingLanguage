@@ -6,7 +6,7 @@ using System.Reflection.Emit;
 namespace Chest.Compiler;
 
 /// <summary>
-/// Tabela de símbolos para gerenciar escopos e variáveis locais
+/// Symbol table to manage scopes and local variables
 /// </summary>
 public class SymbolTable
 {
@@ -26,11 +26,11 @@ public class SymbolTable
     public void DeclareVariable(string name, LocalBuilder local, Type type)
     {
         if (_scopes.Count == 0)
-            throw new InvalidOperationException("Nenhum escopo ativo para declarar variável");
+            throw new InvalidOperationException("No active scope to declare variable");
             
         var currentScope = _scopes.Peek();
         if (currentScope.ContainsKey(name))
-            throw new InvalidOperationException($"Variável '{name}' já foi declarada neste escopo");
+            throw new InvalidOperationException($"Variable '{name}' has already been declared in this scope");
             
         currentScope[name] = (local, type);
     }
@@ -62,7 +62,7 @@ public class SymbolTable
 }
 
 /// <summary>
-/// Assembly gerado com informações para execução
+/// Generated assembly with information for execution
 /// </summary>
 public class ChestAssembly
 {
@@ -78,7 +78,7 @@ public class ChestAssembly
     }
     
     /// <summary>
-    /// Executa o programa Chest compilado
+    /// Executes the compiled Chest program
     /// </summary>
     public void Execute()
     {
@@ -87,7 +87,7 @@ public class ChestAssembly
 }
 
 /// <summary>
-/// Gerador de IL usando Reflection.Emit para compilar AST Chest para .NET IL
+/// IL generator using Reflection.Emit to compile Chest AST to .NET IL
 /// </summary>
 public class ChestEmitter
 {
@@ -97,31 +97,31 @@ public class ChestEmitter
     private readonly Dictionary<string, Type> _finishedTypes = new();
     
     /// <summary>
-    /// Compila um programa Chest para assembly .NET
+    /// Compiles a Chest program to a .NET assembly
     /// </summary>
     public ChestAssembly Emit(ProgramNode program)
     {
         CreateAssembly();
         
-        // Primeira passada: criar tipos (offices)
+        // First pass: create types (offices)
         foreach (var building in program.Buildings)
         {
             CreateOfficeTypes(building);
         }
         
-        // Segunda passada: implementar métodos (employees)
+        // Second pass: implement methods (employees)
         foreach (var building in program.Buildings)
         {
             ImplementOfficeMembers(building);
         }
         
-        // Finalizar tipos
+        // Finalize types
         foreach (var kvp in _officeTypes)
         {
             _finishedTypes[kvp.Key] = kvp.Value.CreateType()!;
         }
         
-        // Encontrar entry point
+        // Find entry point
         var (entryType, entryMethod) = FindEntryPoint(program);
         
         return new ChestAssembly(_assemblyBuilder, entryType, entryMethod);
@@ -179,7 +179,7 @@ public class ChestEmitter
             employee.Name,
             MethodAttributes.Public | MethodAttributes.Static,
             typeof(void),
-            Type.EmptyTypes); // Por enquanto, sem parâmetros
+            Type.EmptyTypes); // For now, no parameters
         
         var il = methodBuilder.GetILGenerator();
         var symbolTable = new SymbolTable();
@@ -223,15 +223,15 @@ public class ChestEmitter
     
     private void EmitVarDeclaration(ILGenerator il, VarDeclNode varDecl, SymbolTable symbolTable)
     {
-        // Por simplicidade, usar sempre object como tipo das variáveis
-        // Isso evita problemas de boxing/unboxing na primeira versão
+        // For simplicity, always use object as variable type
+        // This avoids boxing/unboxing problems in the first version
         var varType = typeof(object);
         
         // Declarar local
         var local = il.DeclareLocal(varType);
         symbolTable.DeclareVariable(varDecl.Name, local, varType);
         
-        // Se há inicialização, gerar código
+        // If there's initialization, generate code
         if (varDecl.Init != null)
         {
             EmitExpression(il, varDecl.Init, symbolTable, varType);
@@ -241,7 +241,7 @@ public class ChestEmitter
     
     private void EmitShow(ILGenerator il, ShowNode show, SymbolTable symbolTable)
     {
-        // Gerar expressão
+        // Generate expression
         EmitExpression(il, show.Expr, symbolTable, typeof(object));
         
         // Chamar ChestRuntime.Show
@@ -254,7 +254,7 @@ public class ChestEmitter
         var elseLabel = il.DefineLabel();
         var endLabel = il.DefineLabel();
         
-        // Gerar condição
+        // Generate condition
         EmitExpression(il, decide.Cond, symbolTable, typeof(bool));
         
         // Se falso, pular para else
@@ -314,7 +314,7 @@ public class ChestEmitter
                 break;
                 
             default:
-                throw new NotSupportedException($"Tipo de expressão não suportado: {expr.GetType()}");
+                throw new NotSupportedException($"Unsupported statement type:: {expr.GetType()}");
         }
     }
     
@@ -344,18 +344,18 @@ public class ChestEmitter
     {
         var local = symbolTable.LookupVariable(ident.Name);
         if (local == null)
-            throw new InvalidOperationException($"Variável '{ident.Name}' não foi declarada");
+            throw new InvalidOperationException($"Variable '{ident.Name}' has not been declared");
         
         il.Emit(OpCodes.Ldloc, local);
     }
     
     private void EmitBinaryOperation(ILGenerator il, BinaryNode binary, SymbolTable symbolTable)
     {
-        // Sempre usar object para simplificar
+        // Always use object to simplify - force dynamic methods
         EmitExpression(il, binary.Left, symbolTable, typeof(object));
         EmitExpression(il, binary.Right, symbolTable, typeof(object));
         
-        // Obter método dinâmico
+        // Get dynamic method
         var runtimeType = typeof(ChestRuntime);
         MethodInfo? method = binary.Op switch
         {
@@ -372,13 +372,15 @@ public class ChestEmitter
             _ => null
         };
         
+        Console.WriteLine($"DEBUG EmitBinaryOperation: op={binary.Op}, method={method?.Name}");
+        
         if (method != null)
         {
             il.Emit(OpCodes.Call, method);
         }
         else
         {
-            throw new InvalidOperationException($"Operação '{binary.Op}' não suportada");
+            throw new InvalidOperationException($"Operation '{binary.Op}' is not supported");
         }
     }
     
@@ -411,7 +413,7 @@ public class ChestEmitter
     {
         var runtimeType = typeof(ChestRuntime);
         
-        // Se pelo menos um é object, usar métodos dinâmicos
+        // If at least one is object, use dynamic methods
         if (leftType == typeof(object) || rightType == typeof(object))
         {
             return op switch
@@ -453,7 +455,7 @@ public class ChestEmitter
     {
         var runtimeType = typeof(ChestRuntime);
         
-        // Tentar encontrar método específico para os tipos
+        // Try to find specific method for the types
         return runtimeType.GetMethod("Concat", new[] { leftType, rightType }) ??
                runtimeType.GetMethod("Concat", new[] { typeof(string), typeof(string) });
     }
@@ -484,7 +486,7 @@ public class ChestEmitter
                 }
             }
         }
-        
-        throw new InvalidOperationException("Nenhum entry point encontrado no programa");
+
+        throw new InvalidOperationException("No entry point found in the program");
     }
 }

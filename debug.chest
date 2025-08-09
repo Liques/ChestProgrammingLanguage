@@ -1,0 +1,4 @@
+building Demo
+  office Main
+    employee Start
+      show 6 * 7

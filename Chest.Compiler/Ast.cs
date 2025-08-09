@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Chest.Compiler;
 
 /// <summary>
-/// Nó base do AST com informações de posição no código fonte
+/// Base AST node with source code position information
 /// </summary>
 public abstract class Node 
 {
@@ -12,7 +12,7 @@ public abstract class Node
 }
 
 /// <summary>
-/// Nó raiz do programa - contém todos os buildings
+/// Program root node - contains all buildings
 /// </summary>
 public class ProgramNode : Node 
 {
@@ -38,7 +38,7 @@ public class OfficeNode : Node
 }
 
 /// <summary>
-/// Employee - equivalente a um método/função
+/// Employee - equivalent to a method/function
 /// </summary>
 public class EmployeeNode : Node 
 {
@@ -48,7 +48,7 @@ public class EmployeeNode : Node
 }
 
 /// <summary>
-/// Declaração de variável (chest)
+/// Variable declaration (chest)
 /// </summary>
 public class VarDeclNode : Node 
 {
@@ -76,12 +76,12 @@ public class DecideNode : Node
 }
 
 /// <summary>
-/// Nó base para expressões
+/// Base node for expressions
 /// </summary>
 public abstract class ExprNode : Node { }
 
 /// <summary>
-/// Literal - valor constante (string, número, bool)
+/// Literal - constant value (string, number, bool)
 /// </summary>
 public class LiteralNode : ExprNode 
 {

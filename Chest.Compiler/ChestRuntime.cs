@@ -3,149 +3,149 @@ using System;
 namespace Chest.Compiler;
 
 /// <summary>
-/// Biblioteca runtime da linguagem Chest
-/// Contém todas as funções nativas que o código IL gerado irá chamar
+/// Chest language runtime library
+/// Contains all native functions that generated IL code will call
 /// </summary>
 public static class ChestRuntime
 {
     /// <summary>
-    /// Implementa o comando 'show' - imprime valor no console
+    /// Implements the 'show' command - prints value to console
     /// </summary>
     public static void Show(object? value)
     {
         Console.WriteLine(value?.ToString() ?? "null");
     }
     
-    #region Operadores de Comparação
+    #region Comparison Operators
     
     /// <summary>
-    /// Operador menor que (&lt;) para números
+    /// Less than (<) operator for numbers
     /// </summary>
     public static bool Lt(double a, double b) => a < b;
     
     /// <summary>
-    /// Operador maior que (&gt;) para números
+    /// Greater than (>) operator for numbers
     /// </summary>
     public static bool Gt(double a, double b) => a > b;
     
     /// <summary>
-    /// Operador menor ou igual (&lt;=) para números
+    /// Less than or equal (<=) operator for numbers
     /// </summary>
     public static bool Le(double a, double b) => a <= b;
     
     /// <summary>
-    /// Operador maior ou igual (&gt;=) para números
+    /// Greater than or equal (>=) operator for numbers
     /// </summary>
     public static bool Ge(double a, double b) => a >= b;
     
     /// <summary>
-    /// Operador igualdade (==) para qualquer tipo
+    /// Equality (==) operator for any type
     /// </summary>
     public static bool Eq(object? a, object? b) => Equals(a, b);
     
     /// <summary>
-    /// Operador diferença (!=) para qualquer tipo
+    /// Inequality (!=) operator for any type
     /// </summary>
     public static bool Ne(object? a, object? b) => !Equals(a, b);
     
     #endregion
     
-    #region Operadores Aritméticos
+    #region Arithmetic Operators
     
     /// <summary>
-    /// Operador adição (+) para números
+    /// Addition (+) operator for numbers
     /// </summary>
     public static double Add(double a, double b) => a + b;
     
     /// <summary>
-    /// Operador subtração (-) para números
+    /// Subtraction (-) operator for numbers
     /// </summary>
     public static double Sub(double a, double b) => a - b;
     
     /// <summary>
-    /// Operador multiplicação (*) para números
+    /// Multiplication (*) operator for numbers
     /// </summary>
     public static double Mul(double a, double b) => a * b;
     
     /// <summary>
-    /// Operador divisão (/) para números
+    /// Division (/) operator for numbers
     /// </summary>
     public static double Div(double a, double b) => a / b;
     
     #endregion
     
-    #region Operadores de String
+    #region String Operators
     
     /// <summary>
-    /// Concatenação (+) para strings
+    /// Concatenation (+) for strings
     /// </summary>
     public static string Concat(string? a, string? b) => (a ?? "") + (b ?? "");
     
     /// <summary>
-    /// Concatenação entre string e número
+    /// Concatenation between string and number
     /// </summary>
     public static string Concat(string? a, double b) => (a ?? "") + b.ToString();
     
     /// <summary>
-    /// Concatenação entre número e string
+    /// Concatenation between number and string
     /// </summary>
     public static string Concat(double a, string? b) => a.ToString() + (b ?? "");
     
     /// <summary>
-    /// Concatenação entre string e bool
+    /// Concatenation between string and bool
     /// </summary>
     public static string Concat(string? a, bool b) => (a ?? "") + (b ? "true" : "false");
     
     /// <summary>
-    /// Concatenação entre bool e string
+    /// Concatenation between bool and string
     /// </summary>
     public static string Concat(bool a, string? b) => (a ? "true" : "false") + (b ?? "");
     
     #endregion
     
-    #region Operadores Lógicos (para futuro)
+    #region Logical Operators (for future use)
     
     /// <summary>
-    /// Operador E lógico (&amp;&amp;)
+    /// Logical AND (&&) operator
     /// </summary>
     public static bool And(bool a, bool b) => a && b;
     
     /// <summary>
-    /// Operador OU lógico (||)
+    /// Logical OR (||) operator
     /// </summary>
     public static bool Or(bool a, bool b) => a || b;
     
     /// <summary>
-    /// Operador NÃO lógico (!)
+    /// Logical NOT (!) operator
     /// </summary>
     public static bool Not(bool a) => !a;
     
     #endregion
     
-    #region Conversões de Tipo
+    #region Type Conversions
     
     /// <summary>
-    /// Converte número para string
+    /// Converts number to string
     /// </summary>
     public static string NumberToText(double value) => value.ToString();
     
     /// <summary>
-    /// Converte bool para string
+    /// Converts bool to string
     /// </summary>
     public static string BoolToText(bool value) => value ? "true" : "false";
     
     /// <summary>
-    /// Tenta converter string para número
+    /// Tries to convert string to number
     /// </summary>
     public static double TextToNumber(string? text)
     {
         if (double.TryParse(text, out var result))
             return result;
-        throw new InvalidOperationException($"Não foi possível converter '{text}' para número");
+        throw new InvalidOperationException($"Could not convert '{text}' to number");
     }
     
     /// <summary>
-    /// Tenta converter string para bool
+    /// Tries to convert string to bool
     /// </summary>
     public static bool TextToBool(string? text)
     {
@@ -153,17 +153,17 @@ public static class ChestRuntime
         {
             "true" or "verdadeiro" or "sim" or "1" => true,
             "false" or "falso" or "não" or "nao" or "0" => false,
-            _ => throw new InvalidOperationException($"Não foi possível converter '{text}' para bool")
+            _ => throw new InvalidOperationException($"Could not convert '{text}' to bool")
         };
     }
     
     #endregion
     
-    #region Utilitários
+    #region Utilities
     
     /// <summary>
-    /// Verifica se um valor é "verdadeiro" na linguagem Chest
-    /// (similar ao JavaScript: 0, "", null, false são falsy)
+    /// Checks if a value is "truthy" in the Chest language
+    /// (similar to JavaScript: 0, "", null, false are falsy)
     /// </summary>
     public static bool IsTruthy(object? value)
     {
@@ -178,7 +178,7 @@ public static class ChestRuntime
     }
     
     /// <summary>
-    /// Converte qualquer valor para string para debugging
+    /// Converts any value to string for debugging
     /// </summary>
     public static string Debug(object? value)
     {
@@ -194,26 +194,26 @@ public static class ChestRuntime
     
     #endregion
     
-    #region Operações Dinâmicas para Object
+    #region Dynamic Operations for Object
     
     /// <summary>
-    /// Adição dinâmica que lida com objects e faz conversões automaticamente
+    /// Dynamic addition that handles objects and performs automatic conversions
     /// </summary>
     public static object AddDynamic(object? left, object? right)
     {
         try
         {
-            // Proteção contra null
+            // Protection against null
             left ??= 0;
             right ??= 0;
             
-            // Caso especial: ambos são strings ou um é string
+            // Special case: both are strings or one is string
             if (left is string || right is string)
             {
                 return (left?.ToString() ?? "") + (right?.ToString() ?? "");
             }
             
-            // Tentar como números
+            // Try as numbers
             var leftNum = Convert.ToDouble(left);
             var rightNum = Convert.ToDouble(right);
             
@@ -221,96 +221,136 @@ public static class ChestRuntime
         }
         catch (Exception ex)
         {
-            throw new InvalidOperationException($"Erro na adição: left={left}, right={right}, error={ex.Message}");
+            throw new InvalidOperationException($"Error in addition: left={left}, right={right}, error={ex.Message}");
         }
     }
     
     /// <summary>
-    /// Subtração dinâmica
+    /// Dynamic subtraction
     /// </summary>
     public static double SubDynamic(object? left, object? right)
     {
-        if (TryGetNumber(left, out var leftNum) && TryGetNumber(right, out var rightNum))
+        try
         {
+            var leftNum = Convert.ToDouble(left ?? 0);
+            var rightNum = Convert.ToDouble(right ?? 0);
             return leftNum - rightNum;
         }
-        throw new InvalidOperationException($"Não é possível subtrair '{right}' de '{left}'");
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Error in subtraction: {ex.Message}");
+        }
     }
     
     /// <summary>
-    /// Multiplicação dinâmica
+    /// Dynamic multiplication
     /// </summary>
     public static double MulDynamic(object? left, object? right)
     {
-        if (TryGetNumber(left, out var leftNum) && TryGetNumber(right, out var rightNum))
+        try
         {
-            return leftNum * rightNum;
+            Console.WriteLine($"DEBUG MulDynamic: left={left} ({left?.GetType()}), right={right} ({right?.GetType()})");
+            var leftNum = Convert.ToDouble(left ?? 0);
+            var rightNum = Convert.ToDouble(right ?? 0);
+            Console.WriteLine($"DEBUG MulDynamic: leftNum={leftNum}, rightNum={rightNum}");
+            var result = leftNum * rightNum;
+            Console.WriteLine($"DEBUG MulDynamic: result={result}");
+            return result;
         }
-        throw new InvalidOperationException($"Não é possível multiplicar '{left}' por '{right}'");
+        catch (Exception ex)
+        {
+            Console.WriteLine($"DEBUG MulDynamic ERROR: {ex}");
+            throw new InvalidOperationException($"Error in multiplication: {ex.Message}");
+        }
     }
     
     /// <summary>
-    /// Divisão dinâmica
+    /// Dynamic division
     /// </summary>
     public static double DivDynamic(object? left, object? right)
     {
-        if (TryGetNumber(left, out var leftNum) && TryGetNumber(right, out var rightNum))
+        try
         {
+            var leftNum = Convert.ToDouble(left ?? 0);
+            var rightNum = Convert.ToDouble(right ?? 1); // Avoid division by zero
             return leftNum / rightNum;
         }
-        throw new InvalidOperationException($"Não é possível dividir '{left}' por '{right}'");
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Error in division: {ex.Message}");
+        }
     }
     
     /// <summary>
-    /// Comparação menor que dinâmica
+    /// Dynamic less than comparison
     /// </summary>
     public static bool LtDynamic(object? left, object? right)
     {
-        if (TryGetNumber(left, out var leftNum) && TryGetNumber(right, out var rightNum))
+        try
         {
+            var leftNum = Convert.ToDouble(left ?? 0);
+            var rightNum = Convert.ToDouble(right ?? 0);
             return leftNum < rightNum;
         }
-        throw new InvalidOperationException($"Não é possível comparar '{left}' < '{right}'");
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Error in comparison <: {ex.Message}");
+        }
     }
     
     /// <summary>
-    /// Comparação maior que dinâmica
+    /// Dynamic greater than comparison
     /// </summary>
     public static bool GtDynamic(object? left, object? right)
     {
-        if (TryGetNumber(left, out var leftNum) && TryGetNumber(right, out var rightNum))
+        try
         {
+            var leftNum = Convert.ToDouble(left ?? 0);
+            var rightNum = Convert.ToDouble(right ?? 0);
             return leftNum > rightNum;
         }
-        throw new InvalidOperationException($"Não é possível comparar '{left}' > '{right}'");
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Error in comparison >: {ex.Message}");
+        }
     }
     
     /// <summary>
-    /// Comparação menor ou igual dinâmica
+    /// Dynamic less than or equal comparison
     /// </summary>
     public static bool LeDynamic(object? left, object? right)
     {
-        if (TryGetNumber(left, out var leftNum) && TryGetNumber(right, out var rightNum))
+        try
         {
+            var leftNum = Convert.ToDouble(left ?? 0);
+            var rightNum = Convert.ToDouble(right ?? 0);
             return leftNum <= rightNum;
         }
-        throw new InvalidOperationException($"Não é possível comparar '{left}' <= '{right}'");
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Error in comparison <=: {ex.Message}");
+        }
     }
     
     /// <summary>
-    /// Comparação maior ou igual dinâmica
+    /// Dynamic greater than or equal comparison
     /// </summary>
     public static bool GeDynamic(object? left, object? right)
     {
-        if (TryGetNumber(left, out var leftNum) && TryGetNumber(right, out var rightNum))
+        try
         {
+            var leftNum = Convert.ToDouble(left ?? 0);
+            var rightNum = Convert.ToDouble(right ?? 0);
             return leftNum >= rightNum;
         }
-        throw new InvalidOperationException($"Não é possível comparar '{left}' >= '{right}'");
+        catch (Exception ex)
+        {
+            throw new InvalidOperationException($"Error in comparison >=: {ex.Message}");
+        }
     }
     
     /// <summary>
-    /// Tenta extrair um número de um object
+    /// Tries to extract a number from an object
     /// </summary>
     private static bool TryGetNumber(object? value, out double number)
     {

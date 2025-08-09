@@ -64,7 +64,7 @@ public enum TokenType
 }
 
 /// <summary>
-/// Lexer (analisador léxico) para a linguagem Chest
+/// Lexer (lexical analyzer) for the Chest language
 /// </summary>
 public class ChestLexer
 {
@@ -94,7 +94,7 @@ public class ChestLexer
     public ChestLexer(string source)
     {
         _source = source;
-        _indentStack.Push(0); // Nível base de indentação
+        _indentStack.Push(0); // Base indentation level
     }
     
     public List<Token> Tokenize()
@@ -158,7 +158,7 @@ public class ChestLexer
             '!' when Peek() == '=' => AdvanceAndCreateToken(TokenType.NotEqual, "!="),
             _ when char.IsDigit(ch) => ScanNumber(),
             _ when char.IsLetter(ch) || ch == '_' => ScanIdentifier(),
-            _ => CreateToken(TokenType.Error, $"Caractere inesperado: '{ch}'")
+            _ => CreateToken(TokenType.Error, $"Unexpected character: '{ch}'")
         };
     }
     
@@ -167,9 +167,9 @@ public class ChestLexer
         _line++;
         _column = 1;
         
-        // Verificar indentação na próxima linha não vazia
+        // Check indentation on next non-empty line
         var nextIndent = MeasureIndentation();
-        if (nextIndent == -1) // Linha vazia ou EOF
+        if (nextIndent == -1) // Empty line or EOF
             return CreateToken(TokenType.Newline, "\n");
         
         var currentIndent = _indentStack.Peek();
@@ -181,7 +181,7 @@ public class ChestLexer
         }
         else if (nextIndent < currentIndent)
         {
-            // Pode haver múltiplos DEDENTs
+            // There can be multiple DEDENTs
             while (_indentStack.Count > 1 && _indentStack.Peek() > nextIndent)
             {
                 _indentStack.Pop();
@@ -216,12 +216,12 @@ public class ChestLexer
             }
             else if (ch == '\t')
             {
-                indent += 4; // Tab = 4 espaços
+                indent += 4; // Tab = 4 spaces
                 Advance();
             }
             else if (ch == '\n' || ch == '\r')
             {
-                // Linha vazia, continuar
+                // Empty line, continue
                 if (ch == '\r' && Peek(1) == '\n')
                     Advance();
                 Advance();
@@ -231,7 +231,7 @@ public class ChestLexer
             }
             else if (ch == '/' && Peek(1) == '/')
             {
-                // Comentário, pular linha
+                // Comment, skip line
                 while (!IsAtEnd() && Peek() != '\n')
                     Advance();
                 if (!IsAtEnd())
@@ -244,21 +244,21 @@ public class ChestLexer
             }
             else
             {
-                // Encontrou conteúdo
+                // Found content
                 break;
             }
         }
         
         if (IsAtEnd())
         {
-            // Restaurar posição e retornar -1 para EOF
+            // Restore position and return -1 for EOF
             _position = savedPos;
             _line = savedLine;
             _column = savedCol;
             return -1;
         }
         
-        // Não avançar a posição, apenas medir
+        // Don't advance position, just measure
         _position = savedPos;
         _line = savedLine;
         _column = savedCol;
@@ -346,7 +346,7 @@ public class ChestLexer
         while (!IsAtEnd() && Peek() != '\n')
             Advance();
         
-        return NextToken(); // Continuar para o próximo token
+        return NextToken(); // Continue to next token
     }
     
     private void SkipWhitespace()
@@ -422,11 +422,11 @@ public class ChestParser
             }
             else if (Check(TokenType.Newline) || Check(TokenType.Indent) || Check(TokenType.Dedent))
             {
-                Advance(); // Pular tokens de formatação no nível superior
+                Advance(); // Skip formatting tokens at top level
             }
             else
             {
-                throw new ParseException($"Esperado 'building', encontrado: {Peek().Type}", Peek().Span);
+                throw new ParseException($"Expected 'building', found: {Peek().Type}", Peek().Span);
             }
         }
         
@@ -437,8 +437,8 @@ public class ChestParser
     {
         var building = new BuildingNode();
         
-        Consume(TokenType.Building, "Esperado 'building'");
-        building.Name = Consume(TokenType.Identifier, "Esperado nome do building").Value;
+        Consume(TokenType.Building, "Expected 'building'");
+        building.Name = Consume(TokenType.Identifier, "Expected building name").Value;
         
         ConsumeBlock();
         building.Members = ParseBuildingMembers();
@@ -462,7 +462,7 @@ public class ChestParser
             }
             else
             {
-                throw new ParseException($"Esperado 'office', encontrado: {Peek().Type}", Peek().Span);
+                throw new ParseException($"Expected 'office', found: {Peek().Type}", Peek().Span);
             }
         }
         
@@ -476,8 +476,8 @@ public class ChestParser
     {
         var office = new OfficeNode();
         
-        Consume(TokenType.Office, "Esperado 'office'");
-        office.Name = Consume(TokenType.Identifier, "Esperado nome do office").Value;
+        Consume(TokenType.Office, "Expected 'office'");
+        office.Name = Consume(TokenType.Identifier, "Expected office name").Value;
         
         ConsumeBlock();
         office.Members = ParseOfficeMembers();
@@ -501,7 +501,7 @@ public class ChestParser
             }
             else
             {
-                throw new ParseException($"Esperado 'employee', encontrado: {Peek().Type}", Peek().Span);
+                throw new ParseException($"Expected 'employee', found: {Peek().Type}", Peek().Span);
             }
         }
         
@@ -515,8 +515,8 @@ public class ChestParser
     {
         var employee = new EmployeeNode();
         
-        Consume(TokenType.Employee, "Esperado 'employee'");
-        employee.Name = Consume(TokenType.Identifier, "Esperado nome do employee").Value;
+        Consume(TokenType.Employee, "Expected 'employee'");
+        employee.Name = Consume(TokenType.Identifier, "Expected employee name").Value;
         
         ConsumeBlock();
         employee.Body = ParseStatements();
@@ -552,7 +552,7 @@ public class ChestParser
             TokenType.Chest => ParseVarDeclaration(),
             TokenType.Show => ParseShowStatement(),
             TokenType.Decide => ParseDecideStatement(),
-            _ => throw new ParseException($"Statement inesperado: {Peek().Type}", Peek().Span)
+            _ => throw new ParseException($"Unexpected statement: {Peek().Type}", Peek().Span)
         };
     }
     
@@ -560,8 +560,8 @@ public class ChestParser
     {
         var varDecl = new VarDeclNode();
         
-        Consume(TokenType.Chest, "Esperado 'chest'");
-        varDecl.Name = Consume(TokenType.Identifier, "Esperado nome da variável").Value;
+        Consume(TokenType.Chest, "Expected 'chest'");
+        varDecl.Name = Consume(TokenType.Identifier, "Expected variable name").Value;
         
         if (Match(TokenType.Assign))
         {
@@ -576,7 +576,7 @@ public class ChestParser
     {
         var show = new ShowNode();
         
-        Consume(TokenType.Show, "Esperado 'show'");
+        Consume(TokenType.Show, "Expected 'show'");
         show.Expr = ParseExpression();
         
         ConsumeStatementEnd();
@@ -587,7 +587,7 @@ public class ChestParser
     {
         var decide = new DecideNode();
         
-        Consume(TokenType.Decide, "Esperado 'decide'");
+        Consume(TokenType.Decide, "Expected 'decide'");
         decide.Cond = ParseExpression();
         
         ConsumeBlock();
@@ -677,7 +677,7 @@ public class ChestParser
         if (Match(TokenType.LeftParen))
         {
             var expr = ParseExpression();
-            Consume(TokenType.RightParen, "Esperado ')' após expressão");
+            Consume(TokenType.RightParen, "Expected ')' after expression");
             return expr;
         }
         
@@ -688,15 +688,15 @@ public class ChestParser
     {
         if (Match(TokenType.LeftBrace))
         {
-            // Sintaxe com chaves
+            // Syntax with braces
             return;
         }
         
-        // Sintaxe com indentação
+        // Syntax with indentation
         if (Check(TokenType.Newline))
             Advance();
         
-        Consume(TokenType.Indent, "Esperado indentação ou '{'");
+        Consume(TokenType.Indent, "Expected indentation or '{'");
     }
     
     private void ConsumeStatementEnd()
@@ -707,7 +707,7 @@ public class ChestParser
         if (Check(TokenType.Newline) || Check(TokenType.Dedent) || IsAtEnd())
             return;
         
-        throw new ParseException("Esperado ';' ou nova linha", Peek().Span);
+        throw new ParseException("Expected ';' or newline", Peek().Span);
     }
     
     private bool Match(params TokenType[] types)
@@ -759,7 +759,7 @@ public class ChestParser
 }
 
 /// <summary>
-/// Exceção de erro de parsing
+/// Parsing error exception
 /// </summary>
 public class ParseException : Exception
 {
