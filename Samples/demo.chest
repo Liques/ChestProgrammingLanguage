@@ -1,0 +1,47 @@
+building DemoApp
+  office Main
+    employee ShowFeatures
+      show "=== Chest Language Demo ==="
+      show "Demonstrating all new features!"
+      show ""
+      
+      attach Console
+      
+      chest userName = ask "What's your name? "
+      show "Nice to meet you, " + userName + "!"
+      show ""
+      
+      chest favoriteNumber = ask "Enter your favorite number: "
+      show "Your favorite number is: " + favoriteNumber
+      show ""
+      
+      show "=== Mathematical Demo ==="
+      chest a = 10.5
+      chest b = 3.2
+      
+      show "Numbers: " + a + " and " + b
+      show "Addition: " + a + " + " + b + " = " + (a + b)
+      show "Subtraction: " + a + " - " + b + " = " + (a - b)
+      show "Multiplication: " + a + " * " + b + " = " + (a * b)
+      show "Division: " + a + " / " + b + " = " + (a / b)
+      show ""
+      
+      show "=== String Operations ==="
+      chest message = ask
+      show "You entered: '" + message + "'"
+      show "Combined with name: " + userName + " says '" + message + "'"
+      show ""
+      
+      show "=== Conditional Logic ==="
+      chest score = 85
+      decide score >= 90
+        show "Grade A: Excellent!"
+      else
+        decide score >= 80
+          show "Grade B: Good job!"
+        else
+          show "Keep studying!"
+      
+      show ""
+      show "Thank you " + userName + " for trying the Chest language!"
+      show "Demo completed successfully."

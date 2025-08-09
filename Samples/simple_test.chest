@@ -1,0 +1,6 @@
+building SimpleInteractiveCalc
+  office Main
+    employee Start
+      show "Enter a number: "
+      chest userInput = ask
+      show "You entered: " + userInput
