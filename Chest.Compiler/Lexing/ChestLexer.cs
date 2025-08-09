@@ -27,6 +27,8 @@ public class ChestLexer
         { "else", TokenType.Else },
         { "go", TokenType.Go },
         { "poke", TokenType.Poke },
+        { "attach", TokenType.Attach },
+        { "ask", TokenType.Ask },
         { "true", TokenType.Bool },
         { "false", TokenType.Bool },
         { "verdadeiro", TokenType.Bool },

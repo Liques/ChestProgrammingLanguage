@@ -16,6 +16,23 @@ public static class ChestRuntime
         Console.WriteLine(value?.ToString() ?? "null");
     }
     
+    /// <summary>
+    /// Implements the 'ask' command - gets user input from console
+    /// </summary>
+    public static string Ask()
+    {
+        return Console.ReadLine() ?? "";
+    }
+    
+    /// <summary>
+    /// Implements the 'ask' command with prompt - gets user input from console
+    /// </summary>
+    public static string Ask(string prompt)
+    {
+        Console.Write(prompt);
+        return Console.ReadLine() ?? "";
+    }
+    
     #region Comparison Operators
     
     /// <summary>

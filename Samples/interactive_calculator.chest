@@ -1,0 +1,59 @@
+building InteractiveCalculator
+  office Math
+    employee Calculate
+      attach Console
+      
+      show "=== Interactive Chest Calculator ==="
+      show "Welcome! Let's perform calculations with your input."
+      show ""
+      
+      show "Enter the first number: "
+      chest firstNumber = ask
+      show "Enter the second number: "
+      chest secondNumber = ask
+      
+      show ""
+      show "=== Arithmetic Operations ==="
+      
+      chest num1 = firstNumber
+      chest num2 = secondNumber
+      
+      chest addResult = num1 + num2
+      show "Addition: " + num1 + " + " + num2 + " = " + addResult
+      
+      chest subResult = num1 - num2
+      show "Subtraction: " + num1 + " - " + num2 + " = " + subResult
+      
+      chest mulResult = num1 * num2
+      show "Multiplication: " + num1 + " * " + num2 + " = " + mulResult
+      
+      chest divResult = num1 / num2
+      show "Division: " + num1 + " / " + num2 + " = " + divResult
+      
+      show ""
+      show "=== Comparison Operations ==="
+      
+      decide num1 < num2
+        show num1 + " is less than " + num2
+      else
+        show num1 + " is not less than " + num2
+      
+      decide num1 > num2
+        show num1 + " is greater than " + num2
+      else
+        show num1 + " is not greater than " + num2
+      
+      decide num1 == num2
+        show num1 + " equals " + num2
+      else
+        show num1 + " does not equal " + num2
+      
+      show ""
+      show "=== Custom Calculation ==="
+      chest customNumber = ask "Enter a number for custom calculation: "
+      
+      chest customResult = customNumber * 2 + 10
+      show "Custom calculation: (" + customNumber + " * 2) + 10 = " + customResult
+      
+      show ""
+      show "Thank you for using the Interactive Chest Calculator!"

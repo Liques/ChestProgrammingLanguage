@@ -206,6 +206,10 @@ public class ChestEmitter
     {
         switch (stmt)
         {
+            case AttachNode attach:
+                EmitAttach(il, attach, symbolTable);
+                break;
+                
             case VarDeclNode varDecl:
                 EmitVarDeclaration(il, varDecl, symbolTable);
                 break;
@@ -219,7 +223,7 @@ public class ChestEmitter
                 break;
                 
             default:
-                throw new NotSupportedException($"Tipo de statement não suportado: {stmt.GetType()}");
+                throw new NotSupportedException($"Unsupported statement type: {stmt.GetType()}");
         }
     }
     
@@ -306,6 +310,13 @@ public class ChestEmitter
         il.MarkLabel(endLabel);
     }
     
+    private void EmitAttach(ILGenerator il, AttachNode attach, SymbolTable symbolTable)
+    {
+        // For now, attach is just a placeholder - it doesn't generate any IL
+        // In the future, this could be used for importing modules/libraries
+        // For this version, we'll just ignore it
+    }
+    
     private void EmitExpression(ILGenerator il, ExprNode expr, SymbolTable symbolTable, Type expectedType)
     {
         switch (expr)
@@ -316,6 +327,10 @@ public class ChestEmitter
                 
             case IdentNode ident:
                 EmitIdentifier(il, ident, symbolTable);
+                break;
+                
+            case AskNode ask:
+                EmitAsk(il, ask, symbolTable);
                 break;
                 
             case BinaryNode binary:
@@ -472,6 +487,27 @@ public class ChestEmitter
         // Try to find specific method for the types
         return runtimeType.GetMethod("Concat", new[] { leftType, rightType }) ??
                runtimeType.GetMethod("Concat", new[] { typeof(string), typeof(string) });
+    }
+    
+    private void EmitAsk(ILGenerator il, AskNode ask, SymbolTable symbolTable)
+    {
+        var runtimeType = typeof(ChestRuntime);
+        
+        if (ask.Prompt != null)
+        {
+            // Ask with prompt
+            EmitExpression(il, ask.Prompt, symbolTable, typeof(string));
+            var askWithPromptMethod = runtimeType.GetMethod("Ask", new[] { typeof(string) }) 
+                ?? throw new InvalidOperationException("Ask method with prompt not found");
+            il.Emit(OpCodes.Call, askWithPromptMethod);
+        }
+        else
+        {
+            // Ask without prompt
+            var askMethod = runtimeType.GetMethod("Ask", Type.EmptyTypes) 
+                ?? throw new InvalidOperationException("Ask method not found");
+            il.Emit(OpCodes.Call, askMethod);
+        }
     }
     
     private (Type entryType, MethodInfo entryMethod) FindEntryPoint(ProgramNode program)

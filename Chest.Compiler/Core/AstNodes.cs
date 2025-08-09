@@ -76,6 +76,14 @@ public class DecideNode : Node
 }
 
 /// <summary>
+/// Attach statement (import/using functionality)
+/// </summary>
+public class AttachNode : Node 
+{
+    public string Module { get; set; } = "";
+}
+
+/// <summary>
 /// Base node for expressions
 /// </summary>
 public abstract class ExprNode : Node { }
@@ -95,6 +103,14 @@ public class LiteralNode : ExprNode
 public class IdentNode : ExprNode 
 {
     public string Name { get; set; } = "";
+}
+
+/// <summary>
+/// Ask expression - get user input (equivalent to Console.ReadLine())
+/// </summary>
+public class AskNode : ExprNode 
+{
+    public ExprNode? Prompt { get; set; }
 }
 
 /// <summary>

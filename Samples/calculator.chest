@@ -1,0 +1,43 @@
+building Calculator
+  office Main
+    employee Start
+      show "=== Chest Interactive Calculator ==="
+      chest userName = ask "Enter your name: "
+      show "Hello " + userName + "! Welcome to the calculator."
+      show ""
+      chest num1 = ask "Enter first number: "
+      chest num2 = ask "Enter second number: "
+      show ""
+      show "Input Summary:"
+      show "First input: " + num1
+      show "Second input: " + num2
+      show "Concatenated: " + num1 + num2
+      show ""
+      show "=== Arithmetic Operations ==="
+      chest addResult = num1 + num2
+      show "Addition: " + num1 + " + " + num2 + " = " + addResult
+      chest subResult = num1 - num2
+      show "Subtraction: " + num1 + " - " + num2 + " = " + subResult
+      chest mulResult = num1 * num2
+      show "Multiplication: " + num1 + " * " + num2 + " = " + mulResult
+      chest divResult = num1 / num2
+      show "Division: " + num1 + " / " + num2 + " = " + divResult
+      show ""
+      show "=== Comparison Operations ==="
+      decide num1 < num2
+        show num1 + " is less than " + num2
+      else
+        show num1 + " is not less than " + num2
+      decide num1 > num2
+        show num1 + " is greater than " + num2
+      else
+        show num1 + " is not greater than " + num2
+      decide num1 == num2
+        show num1 + " equals " + num2
+      else
+        show num1 + " does not equal " + num2
+      show ""
+      chest message = ask "Enter a message to display: "
+      show "Your message: " + message
+      show ""
+      show "Thank you " + userName + " for using the Chest Calculator!"

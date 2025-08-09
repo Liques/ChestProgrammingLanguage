@@ -157,6 +157,7 @@ public class ChestParser
     {
         return Peek().Type switch
         {
+            TokenType.Attach => ParseAttach(),
             TokenType.Chest => ParseVarDecl(),
             TokenType.Show => ParseShow(),
             TokenType.Decide => ParseDecide(),
@@ -178,6 +179,17 @@ public class ChestParser
         
         ConsumeStatementEnd();
         return varDecl;
+    }
+    
+    private AttachNode ParseAttach()
+    {
+        var attach = new AttachNode();
+        
+        Consume(TokenType.Attach, "Expected 'attach'");
+        attach.Module = Consume(TokenType.Identifier, "Expected module name").Value;
+        
+        ConsumeStatementEnd();
+        return attach;
     }
     
     private ShowNode ParseShow()
@@ -279,6 +291,19 @@ public class ChestParser
     
     private ExprNode ParsePrimary()
     {
+        if (Match(TokenType.Ask))
+        {
+            var ask = new AskNode();
+            
+            // Check if there's a prompt (optional)
+            if (Match(TokenType.String))
+            {
+                ask.Prompt = new LiteralNode { Value = Previous().Value, Type = ChestType.Text };
+            }
+            
+            return ask;
+        }
+        
         if (Match(TokenType.Number))
         {
             var value = double.Parse(Previous().Value);

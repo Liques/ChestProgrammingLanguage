@@ -20,6 +20,8 @@ Chest is designed to be **intuitive** using real-world metaphors:
 - **chest** = variable (a chest that stores values)
 - **show** = print/display (show chest contents)
 - **decide** = if/else (make a decision)
+- **attach** = import/using (attach external functionality)
+- **ask** = get user input (ask for information)
 - **go** = access object/property (go to a location)
 - **poke** = call method (poke someone to do something)
 
@@ -53,18 +55,28 @@ decide condition {
 }
 ```
 
+### User Input and Module Import
+```rust
+attach Console        // Import functionality (similar to 'using' in C#)
+chest name = ask "Enter your name: "    // Get user input with prompt
+chest value = ask                       // Get user input without prompt
+show "Hello " + name
+```
+
 ## FORMAL GRAMMAR
 
 ```
 program        : buildingDecl+ EOF ;
 buildingDecl   : 'building' IDENT block ;
 block          : '{' stmt* '}' ;
-stmt           : officeDecl
+stmt           : attachStmt
+               | officeDecl
                | employeeDecl
                | varDecl ';'
                | showStmt ';'
                | decideStmt
                ;
+attachStmt     : 'attach' IDENT ';' ;
 officeDecl     : 'office' IDENT block ;
 employeeDecl   : 'employee' IDENT paramList? block ;
 paramList      : '(' (IDENT (',' IDENT)*)? ')' ;
@@ -73,9 +85,11 @@ showStmt       : 'show' expr ;
 decideStmt     : 'decide' expr block ('else' block)? ;
 expr           : literal
                | IDENT
+               | askExpr
                | expr binop expr
                | '(' expr ')'
                ;
+askExpr        : 'ask' STRING? ;
 literal        : NUMBER | STRING | 'true' | 'false' ;
 binop          : '+' | '-' | '*' | '/' | '<' | '>' | '==' | '!=' | '<=' | '>=' ;
 ```
@@ -161,6 +175,11 @@ public class DecideNode : Node
     public List<Node>? Else { get; set; }
 }
 
+public class AttachNode : Node 
+{
+    public string Module { get; set; } = "";
+}
+
 public abstract class ExprNode : Node { }
 
 public class LiteralNode : ExprNode 
@@ -172,6 +191,11 @@ public class LiteralNode : ExprNode
 public class IdentNode : ExprNode 
 {
     public string Name { get; set; } = "";
+}
+
+public class AskNode : ExprNode 
+{
+    public ExprNode? Prompt { get; set; }
 }
 
 public class BinaryNode : ExprNode 
@@ -218,6 +242,17 @@ public static class ChestRuntime
         Console.WriteLine(x?.ToString() ?? "null");
     }
     
+    public static string Ask()
+    {
+        return Console.ReadLine() ?? "";
+    }
+    
+    public static string Ask(string prompt)
+    {
+        Console.Write(prompt);
+        return Console.ReadLine() ?? "";
+    }
+    
     public static bool Lt(double a, double b) => a < b;
     public static bool Gt(double a, double b) => a > b;
     public static bool Le(double a, double b) => a <= b;
@@ -238,6 +273,9 @@ public static class ChestRuntime
 
 | Chest Construct | IL Action |
 |-----------------|----------|
+| `attach Module` | No IL generated (placeholder for future module system) |
+| `ask` | `Call ChestRuntime.Ask()` |
+| `ask "prompt"` | `Ldstr "prompt"`, `Call ChestRuntime.Ask(string)` |
 | `text` literal | `Ldstr` with string |
 | `number` literal | `Ldc_R8` (double) |
 | `bool` literal | `Ldc_I4_0`/`Ldc_I4_1` |
@@ -353,6 +391,8 @@ il.Emit(OpCodes.Call, showMethodInfo);
 4. **IfTrue**: `decide 1 < 2 { show "ok" } else { show "nope" }` → output: "ok"
 5. **IfFalse**: `decide 2 < 1 { show "ok" } else { show "nope" }` → output: "nope"
 6. **StringConcat**: `show "Hello" + " World"` → output: "Hello World"
+7. **UserInput**: `chest name = ask "Name: "; show "Hello " + name` → input: "Alice" → output: "Hello Alice"
+8. **SimpleAsk**: `chest value = ask; show value` → input: "test" → output: "test"
 
 ### Test Structure
 ```csharp
@@ -390,6 +430,19 @@ building Demo
       show "Hello, Chest!"
 ```
 
+### User Input and Interaction
+```rust
+building Interactive
+  office Main
+    employee Start
+      attach Console
+      chest name = ask "Enter your name: "
+      show "Hello " + name + "!"
+      
+      chest age = ask "Enter your age: "
+      show "You are " + age + " years old"
+```
+
 ### Variables and Operations
 ```rust
 building Calc
@@ -416,21 +469,31 @@ building Logic
 
 ### Complex Example
 ```rust
-building Business
-  office HR
-    employee ProcessEmployee
-      chest name = "John"
-      chest salary = 5000.0
+building InteractiveApp
+  office UserInterface
+    employee RunApp
+      attach Console
       
-      show "Processing: " + name
+      chest userName = ask "Welcome! Enter your name: "
+      show "Hello " + userName + "!"
       
-      decide salary > 4000 {
-        show "High salary"
-        chest bonus = salary * 0.1
-        show "Bonus: " + bonus
-      } else {
-        show "Normal salary"
-      }
+      chest operation = ask "Enter operation (add/multiply): "
+      chest num1 = ask "Enter first number: "
+      chest num2 = ask "Enter second number: "
+      
+      show "You chose: " + operation
+      show "Numbers: " + num1 + " and " + num2
+      
+      decide operation == "add"
+        show "Note: This would add the numbers if we had conversion"
+      else
+        decide operation == "multiply"
+          show "Note: This would multiply if we had conversion"
+        else
+          show "Unknown operation"
+      
+      show "String concatenation: " + num1 + num2
+      show "Thank you " + userName + "!"
 ```
 
 ## INSTRUCTIONS FOR LLM

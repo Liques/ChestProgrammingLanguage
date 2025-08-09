@@ -3,21 +3,21 @@ using Chest.Compiler.Core;
 namespace Chest.Compiler.Lexing;
 
 /// <summary>
-/// Token da linguagem Chest
+/// Token of the Chest language
 /// </summary>
 public record Token(TokenType Type, string Value, SourceSpan Span);
 
 /// <summary>
-/// Tipos de token da linguagem Chest
+/// Token types of the Chest language
 /// </summary>
 public enum TokenType
 {
-    // Literais
+    // Literals
     Number,
     String,
     Bool,
     
-    // Identificadores e palavras-chave
+    // Identifiers and keywords
     Identifier,
     Building,
     Office,
@@ -28,8 +28,10 @@ public enum TokenType
     Else,
     Go,
     Poke,
+    Attach,
+    Ask,
     
-    // Operadores
+    // Operators
     Plus,
     Minus,
     Multiply,
@@ -42,7 +44,7 @@ public enum TokenType
     NotEqual,
     Assign,
     
-    // Delimitadores
+    // Delimiters
     LeftBrace,
     RightBrace,
     LeftParen,
@@ -50,12 +52,12 @@ public enum TokenType
     Comma,
     Semicolon,
     
-    // Especiais
+    // Specials
     Newline,
     Indent,
     Dedent,
     EOF,
     
-    // Erro
+    // Error
     Error
 }

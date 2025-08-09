@@ -1,0 +1,80 @@
+building AdvancedCalculator
+  office Scientific
+    employee CalculateAdvanced
+      show "=== Advanced Chest Calculator ==="
+      show "Testing advanced mathematical operations..."
+      show ""
+      
+      // Area calculations
+      show "=== Area Calculations ==="
+      chest rectangleLength = 12
+      chest rectangleWidth = 8
+      chest rectangleArea = rectangleLength * rectangleWidth
+      show "Rectangle area: " + rectangleLength + " x " + rectangleWidth + " = " + rectangleArea
+      
+      chest circleRadius = 5
+      chest pi = 3.14159
+      chest circleArea = pi * circleRadius * circleRadius
+      show "Circle area (radius " + circleRadius + "): " + circleArea
+      
+      // Volume calculations
+      show ""
+      show "=== Volume Calculations ==="
+      chest cubeSize = 6
+      chest cubeVolume = cubeSize * cubeSize * cubeSize
+      show "Cube volume (side " + cubeSize + "): " + cubeVolume
+      
+      chest sphereRadius = 4
+      chest sphereVolume = 4 / 3 * pi * sphereRadius * sphereRadius * sphereRadius
+      show "Sphere volume (radius " + sphereRadius + "): " + sphereVolume
+      
+      // Temperature conversions
+      show ""
+      show "=== Temperature Conversions ==="
+      chest celsius = 25
+      chest fahrenheit = celsius * 9 / 5 + 32
+      show celsius + "°C = " + fahrenheit + "°F"
+      
+      chest kelvin = celsius + 273.15
+      show celsius + "°C = " + kelvin + " K"
+      
+      // Financial calculations
+      show ""
+      show "=== Financial Calculations ==="
+      chest principal = 1000
+      chest rate = 0.05
+      chest time = 2
+      chest simpleInterest = principal * rate * time
+      show "Simple Interest: P=" + principal + ", R=" + rate + ", T=" + time + " years"
+      show "Interest = " + simpleInterest
+      
+      chest totalAmount = principal + simpleInterest
+      show "Total Amount = " + totalAmount
+      
+      // Conditional calculations
+      show ""
+      show "=== Conditional Logic ==="
+      chest score = 85
+      decide score >= 90
+        show "Grade: A (Excellent)"
+      else
+        decide score >= 80
+          show "Grade: B (Good)"
+        else
+          decide score >= 70
+            show "Grade: C (Average)"
+          else
+            show "Grade: F (Needs Improvement)"
+      
+      // Performance metrics
+      show ""
+      show "=== Performance Analysis ==="
+      chest operations = 25
+      chest executionTime = 0.002
+      chest operationsPerSecond = operations / executionTime
+      show "Operations performed: " + operations
+      show "Execution time: " + executionTime + " seconds"
+      show "Operations per second: " + operationsPerSecond
+      
+      show ""
+      show "Advanced calculator operations completed!"

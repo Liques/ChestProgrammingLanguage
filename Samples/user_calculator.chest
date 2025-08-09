@@ -1,0 +1,54 @@
+building UserCalculator
+  office Math
+    employee RunCalculator
+      show "=== User Input Calculator ==="
+      show "This calculator takes your input for real calculations!"
+      show ""
+      
+      show "Enter the first number: "
+      chest input1 = ask
+      show "Enter the second number: "
+      chest input2 = ask
+      
+      show ""
+      show "Your inputs were: " + input1 + " and " + input2
+      show ""
+      show "=== String Operations ==="
+      show "Concatenation: " + input1 + " + " + input2 + " = " + input1 + input2
+      
+      show ""
+      show "=== Comparison Tests ==="
+      
+      decide input1 < input2
+        show input1 + " is lexically less than " + input2
+      else
+        show input1 + " is not lexically less than " + input2
+      
+      decide input1 > input2
+        show input1 + " is lexically greater than " + input2
+      else
+        show input1 + " is not lexically greater than " + input2
+      
+      decide input1 == input2
+        show input1 + " equals " + input2
+      else
+        show input1 + " does not equal " + input2
+      
+      show ""
+      show "=== Mathematical Demo with Hardcoded Numbers ==="
+      
+      chest num1 = 25.5
+      chest num2 = 10.3
+      
+      chest sum = num1 + num2
+      chest diff = num1 - num2
+      chest product = num1 * num2
+      chest quotient = num1 / num2
+      
+      show "Demo: " + num1 + " + " + num2 + " = " + sum
+      show "Demo: " + num1 + " - " + num2 + " = " + diff
+      show "Demo: " + num1 + " * " + num2 + " = " + product
+      show "Demo: " + num1 + " / " + num2 + " = " + quotient
+      
+      show ""
+      show "Calculator completed successfully!"
