@@ -2,8 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Reflection;
 using System.Reflection.Emit;
+using Chest.Compiler.Core;
+using Chest.Compiler.Runtime;
 
-namespace Chest.Compiler;
+namespace Chest.Compiler.CodeGen;
 
 /// <summary>
 /// Symbol table to manage scopes and local variables
@@ -254,13 +256,20 @@ public class ChestEmitter
         var elseLabel = il.DefineLabel();
         var endLabel = il.DefineLabel();
         
-        // Generate condition
-        EmitExpression(il, decide.Cond, symbolTable, typeof(bool));
+        // Generate condition - get as object and then unbox if needed
+        EmitExpression(il, decide.Cond, symbolTable, typeof(object));
         
-        // Se falso, pular para else
+        // If the condition is an object (boxed), we need to unbox it
+        if (decide.Cond is BinaryNode)
+        {
+            // Binary operations return boxed bool, need to unbox
+            il.Emit(OpCodes.Unbox_Any, typeof(bool));
+        }
+        
+        // If false, jump to else
         il.Emit(OpCodes.Brfalse, elseLabel);
         
-        // Bloco then
+        // Then block
         symbolTable.PushScope();
         try
         {
@@ -276,7 +285,7 @@ public class ChestEmitter
         
         il.Emit(OpCodes.Br, endLabel);
         
-        // Bloco else (se existir)
+        // Else block (if exists)
         il.MarkLabel(elseLabel);
         if (decide.Else != null)
         {
@@ -372,11 +381,16 @@ public class ChestEmitter
             _ => null
         };
         
-        Console.WriteLine($"DEBUG EmitBinaryOperation: op={binary.Op}, method={method?.Name}");
-        
         if (method != null)
         {
             il.Emit(OpCodes.Call, method);
+            
+            // If the method returns a value type (like bool or double) and we're in a context 
+            // that expects object, we need to box it
+            if (method.ReturnType.IsValueType)
+            {
+                il.Emit(OpCodes.Box, method.ReturnType);
+            }
         }
         else
         {

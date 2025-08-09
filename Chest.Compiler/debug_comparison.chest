@@ -1,0 +1,4 @@
+building Debug
+  office Main
+    employee Start
+      show 2 < 1

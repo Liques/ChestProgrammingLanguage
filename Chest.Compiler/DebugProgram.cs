@@ -1,5 +1,8 @@
 using System;
-using Chest.Compiler;
+using Chest.Compiler.Core;
+using Chest.Compiler.Lexing;
+using Chest.Compiler.Parsing;
+using Chest.Compiler.CodeGen;
 
 // Programa de debug para testar geração de IL
 class DebugProgram

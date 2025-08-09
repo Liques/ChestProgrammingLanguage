@@ -1,6 +1,10 @@
 using System;
 using System.IO;
 using Xunit;
+using Chest.Compiler.Core;
+using Chest.Compiler.Lexing;
+using Chest.Compiler.Parsing;
+using Chest.Compiler.CodeGen;
 
 namespace Chest.Compiler.Tests;
 

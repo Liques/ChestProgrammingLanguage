@@ -1,5 +1,9 @@
 ﻿using System;
-using Chest.Compiler;
+using Chest.Compiler.Core;
+using Chest.Compiler.Lexing;
+using Chest.Compiler.Parsing;
+using Chest.Compiler.CodeGen;
+using Chest.Compiler.Runtime;
 
 namespace Chest.Compiler;
 
@@ -13,18 +17,6 @@ class Program
     {
         Console.WriteLine("=== Chest Compiler v1.0 ===");
         Console.WriteLine("Compiling Chest code to IL (.NET)...\n");
-        
-        // DEBUG: Test MulDynamic directly
-        try
-        {
-            Console.WriteLine("DEBUG: Testing MulDynamic directly...");
-            var result = ChestRuntime.MulDynamic(6.0, 7.0);
-            Console.WriteLine($"DEBUG: MulDynamic(6.0, 7.0) = {result}");
-        }
-        catch (Exception ex)
-        {
-            Console.WriteLine($"DEBUG: MulDynamic failed: {ex}");
-        }
         
         try
         {

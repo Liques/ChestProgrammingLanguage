@@ -1,6 +1,6 @@
 using System;
 
-namespace Chest.Compiler;
+namespace Chest.Compiler.Runtime;
 
 /// <summary>
 /// Chest language runtime library
@@ -249,17 +249,13 @@ public static class ChestRuntime
     {
         try
         {
-            Console.WriteLine($"DEBUG MulDynamic: left={left} ({left?.GetType()}), right={right} ({right?.GetType()})");
             var leftNum = Convert.ToDouble(left ?? 0);
             var rightNum = Convert.ToDouble(right ?? 0);
-            Console.WriteLine($"DEBUG MulDynamic: leftNum={leftNum}, rightNum={rightNum}");
             var result = leftNum * rightNum;
-            Console.WriteLine($"DEBUG MulDynamic: result={result}");
             return result;
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"DEBUG MulDynamic ERROR: {ex}");
             throw new InvalidOperationException($"Error in multiplication: {ex.Message}");
         }
     }
