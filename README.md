@@ -11,6 +11,10 @@ The shortage of developers worldwide indicates that programming languages are no
 
 The Chest language was designed to be learned very quickly even for people who never developed before. Instead of make the new developers understand the main developing concepts, the Chest language try to adapt itself to concepts that are common in our real world.
 
+### Update (09/08/2025)
+
+Please check [this post/PR](https://github.com/Liques/ChestProgrammingLanguage/pull/3) where I share a text about how I see this project today after the AI.
+
 ## How easy is it?
 
 For example: Let's say that you want to build a business building. How a business is divided? Well, a business is divided into offices. What we have in offices? Employees and some furniture. The furniture by itself does not do anything beyond to keep some storage. But the employees are supposed to do something in the office, they always have a function.
